@@ -21,16 +21,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
               <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link" href="index.html">Home</a>
+                  <a class="nav-link" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="listagem.html">Listagem</a>
+                  <a class="nav-link" href="listagem.php">Listagem</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="cadastro.html">Cadastro</a>
+                  <a class="nav-link" href="cadastro.php">Cadastro</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="sobre.html">Sobre</a>
+                    <a class="nav-link" href="sobre.php">Sobre</a>
                   </li>
               </ul>
             </div>
