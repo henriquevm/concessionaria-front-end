@@ -73,8 +73,6 @@
                                         echo "</div>";
                                     echo "</div>";
                                 echo "</div>";
-
-
                             }
                         } else {
                             echo "Erro: Não foi possível recuperar os dados do banco de dados";
