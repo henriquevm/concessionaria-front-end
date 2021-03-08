@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.23, for macos10.13 (x86_64)
 --
--- Host: localhost    Database: concessionaria
+-- Host: 127.0.0.1    Database: concessionaria
 -- ------------------------------------------------------
--- Server version	5.7.29
+-- Server version	5.7.26
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,61 +16,87 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `carros`
+-- Table structure for table `cor`
 --
 
-DROP TABLE IF EXISTS `carros`;
+DROP TABLE IF EXISTS `cor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `carros` (
-  `id_carro` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `cor` (
+  `id_cor` int(11) NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(255) NOT NULL,
+  PRIMARY KEY (`id_cor`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cor`
+--
+
+LOCK TABLES `cor` WRITE;
+/*!40000 ALTER TABLE `cor` DISABLE KEYS */;
+INSERT INTO `cor` VALUES (1,'Vermelho'),(2,'Preto'),(3,'Prata'),(4,'Branco');
+/*!40000 ALTER TABLE `cor` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `marca`
+--
+
+DROP TABLE IF EXISTS `marca`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `marca` (
+  `id_marca` int(11) NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(255) NOT NULL,
+  PRIMARY KEY (`id_marca`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `marca`
+--
+
+LOCK TABLES `marca` WRITE;
+/*!40000 ALTER TABLE `marca` DISABLE KEYS */;
+INSERT INTO `marca` VALUES (1,'Fiat'),(2,'Honda'),(3,'Chevrolet'),(4,'Ford'),(5,'Hyundai');
+/*!40000 ALTER TABLE `marca` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `veiculo`
+--
+
+DROP TABLE IF EXISTS `veiculo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `veiculo` (
+  `id_veiculo` int(11) NOT NULL AUTO_INCREMENT,
   `fk_id_marca` int(11) NOT NULL,
   `modelo` varchar(255) NOT NULL,
   `ano` int(5) NOT NULL,
   `preco` decimal(12,2) NOT NULL,
   `foto` varchar(255) NOT NULL,
-  `cor` varchar(255) NOT NULL,
+  `fk_id_cor` int(11) NOT NULL,
   `descricao` text,
   `data_cadastro` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `data_edicao` datetime DEFAULT NULL,
-  PRIMARY KEY (`id_carro`),
+  PRIMARY KEY (`id_veiculo`),
   KEY `fk_id_marca` (`fk_id_marca`),
-  CONSTRAINT `carros_ibfk_1` FOREIGN KEY (`fk_id_marca`) REFERENCES `marcas` (`id_marca`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  KEY `fk_id_cor` (`fk_id_cor`),
+  CONSTRAINT `veiculo_ibfk_1` FOREIGN KEY (`fk_id_marca`) REFERENCES `marca` (`id_marca`),
+  CONSTRAINT `veiculo_ibfk_2` FOREIGN KEY (`fk_id_cor`) REFERENCES `cor` (`id_cor`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `carros`
+-- Dumping data for table `veiculo`
 --
 
-LOCK TABLES `carros` WRITE;
-/*!40000 ALTER TABLE `carros` DISABLE KEYS */;
-INSERT INTO `carros` VALUES (1,1,'Mobi',2020,35000.00,'fiat-mobi.jpg','Vermelho','Um verdadeiro desbravador das ruas, o Fiat Mobi possui um desgin jovem pensado para encarar as ruas e avenidas com muita presença e estilo.','2021-03-07 16:31:01',NULL);
-/*!40000 ALTER TABLE `carros` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `marcas`
---
-
-DROP TABLE IF EXISTS `marcas`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `marcas` (
-  `id_marca` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(255) NOT NULL,
-  PRIMARY KEY (`id_marca`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `marcas`
---
-
-LOCK TABLES `marcas` WRITE;
-/*!40000 ALTER TABLE `marcas` DISABLE KEYS */;
-INSERT INTO `marcas` VALUES (1,'Fiat');
-/*!40000 ALTER TABLE `marcas` ENABLE KEYS */;
+LOCK TABLES `veiculo` WRITE;
+/*!40000 ALTER TABLE `veiculo` DISABLE KEYS */;
+INSERT INTO `veiculo` VALUES (1,1,'Mobi',2020,35000.00,'fiat-mobi.jpg',1,'Um verdadeiro desbravador das ruas, o Fiat Mobi possui um desgin jovem pensado para encarar as ruas e avenidas com muita presença e estilo.','2021-03-07 16:31:01',NULL),(2,5,'HB20',2021,47990.00,'hb20.jpg',4,'A linha 2021 do Hyundai HB20 começa a ser oferecida em todo o Brasil com pequenas alterações no visual e na lista de equipamentos. As versões Sense, Vision e Evolution, as mais baratas e que usam o motor 1.0 aspirado, passam a ter a grade frontal pintada de preto e uma mudança no pacote de equipamentos opcionais, unificando a oferta do controle de estabilidade com mais itens de segurança, dependendo da configuração.','2021-03-08 02:11:59',NULL);
+/*!40000 ALTER TABLE `veiculo` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -86,4 +112,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-07 16:33:15
+-- Dump completed on 2021-03-08  2:12:59

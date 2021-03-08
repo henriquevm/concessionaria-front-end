@@ -42,12 +42,10 @@
             </header>
             <?php 
 
-                try {
-                    $conexao = new PDO("mysql:host=localhost; dbname=concessionaria", "root", "root");
-                    $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $conexao->exec("set names utf8");
+                require_once('conexao.php');
 
-                    $stmt = $conexao->prepare("SELECT carros.foto, modelo, marcas.nome, carros.preco, carros.cor, carros.descricao FROM carros inner join marcas on carros.fk_id_marca = marcas.id_marca");
+                try {
+                    $stmt = $conexao->prepare("SELECT veiculo.id_veiculo as id, veiculo.foto, veiculo.modelo, marca.descricao as marca, veiculo.preco, cor.descricao as cor, veiculo.descricao FROM veiculo INNER JOIN marca ON veiculo.fk_id_marca = marca.id_marca INNER JOIN cor ON cor.id_cor = veiculo.fk_id_cor");
                 
                         if ($stmt->execute()) {
                             while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {  
@@ -59,7 +57,7 @@
                                         echo "<div class='col-md-9 p-3'>";
                                             echo "<h3>".$rs->modelo."</h3>";
                                             echo "<p>";
-                                                echo "<strong>"."Marca: "."</strong>".$rs->nome."<br>";
+                                                echo "<strong>"."Marca: "."</strong>".$rs->marca."<br>";
                                                 echo "<strong>"."Preço: "."</strong>".$rs->preco."<br>";
                                                 echo "<strong>"."Cor: "."</strong>".$rs->cor;
                                             echo "</p>";
@@ -67,7 +65,7 @@
                                              echo $rs->descricao;
                                              echo "</p>";
                                              echo "<p class='text-right'>";
-                                                echo "<a href='editar.html' class='btn btn-primary'>"."Editar"."</a>";
+                                                echo "<a href='editar.php?id=".$rs->id."' class='btn btn-primary'>"."Editar"."</a>";
                                                 echo "<a href='#' class='btn btn-danger'>"."Excluir"."</a>";
                                             echo "</p>";
                                         echo "</div>";
