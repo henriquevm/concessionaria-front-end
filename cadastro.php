@@ -1,3 +1,26 @@
+<?php
+    require_once('conexao.php');
+
+    $marcas = [];
+    $cores = [];
+    $veiculo = null;
+
+    try {   
+        $consulta = $conexao->query("SELECT id_marca, descricao FROM marca");
+        while ($linha = $consulta->fetch(PDO::FETCH_ASSOC)) {
+            array_push($marcas, $linha);
+        }
+
+        $consulta = $conexao->query("SELECT id_cor, descricao FROM cor");
+        while ($linha = $consulta->fetch(PDO::FETCH_ASSOC)) {
+            array_push($cores, $linha);
+        }
+
+    } catch (PDOException $erro) {
+        echo "Erro na conexão:" . $erro->getMessage();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,93 +58,66 @@
               </ul>
             </div>
           </nav>
-
-        <form id="formVeiculo" method="POST" class="row" name="formulario">
+          <form id="formVeiculo" method="POST" action="#" class="row">
             <div class="form-group col-md-6">
                 <label>Marca:</label>
-                <select id="marca" class="form-control custom-select" name="marca">
-                    <option value="">-- Selecionar --</option>
-                    <option value="Chevrolet">Chevrolet</option>
-                    <option value="Ford">Ford</option>
-                    <option value="Hyiundai">Hyiundai</option>
+                <select id="marca" name="id_marca" class="form-control custom-select">
+                    <option value="" disabled selected>-- Selecionar --</option>
+                    <?php
+                        for ($i = 0; $i < count($marcas); $i++) {
+                            echo "<option  value=\"".$marcas[$i]['id_marca']."\">".
+                            $marcas[$i]['descricao']."</option>";
+                        }
+                    ?>
                 </select>
                 <div class="alert-danger w-100 p-2 d-none">Marca é obrigatório</div>
-            </div> 
+            </div>
             <div class="form-group col-md-6">
                 <label>Modelo:</label>
-                <input type="text" id="modelo" class="form-control" placeholder="Insira o nome do modelo" name="modelo">
+                <input type="text" id="modelo" name="modelo" class="form-control" placeholder="Insira o nome do modelo">
                 <div class="alert-danger w-100 p-2 d-none">Modelo inválido</div>
             </div>
             <div class="form-group col-md-6">
                 <label>Ano:</label>
-                <input type="number" id="ano" class="form-control" value="" placeholder="Insira o ano do modelo" name="ano">
+                <input type="number" id="ano" name="ano" class="form-control" placeholder="Insira o ano do modelo">
                 <div class="alert-danger w-100 p-2 d-none">Ano inválido</div>
             </div>
             <div class="form-group col-md-6">
                 <label>Preço:</label>
-                <input type="text" id="preco" class="form-control" value="" placeholder="Insira o preço do modelo" name="preco">
+                <input type="text" id="preco" name="preco" class="form-control" placeholder="Insira o preço do modelo">
                 <div class="alert-danger w-100 p-2 d-none">Preço inválido</div>
             </div>
             <div class="form-group col-md-6">
                 <label>Foto:</label>
-                <input type="text" id="foto" class="form-control" value="" placeholder="Insira o nome da foto" name="foto">
+                <input type="text" id="foto" name="foto" class="form-control" placeholder="Insira o nome da foto">
             </div>
             <div class="form-group col-md-6">
                 <label>Cor:</label>
-                <select id="cor" class="form-control custom-select" name="cor">
-                    <option value="">-- Selecionar --</option>
-                    <option value="Preto">Preto</option>
-                    <option value="Branco">Branco</option>
-                    <option value="Prata">Prata</option>
-                    <option value="Vermelho">Vermelho</option>
+                <select id="cor" name="id_cor" class="form-control custom-select">
+                    <option value="" disabled selected>-- Selecionar --</option>
+                    <?php
+                        for ($i = 0; $i < count($cores); $i++) {
+                            echo "<option value=\"".$cores[$i]['id_cor']."\">".
+                                $cores[$i]['descricao']."</option>";
+                        }
+                    ?>
                 </select>
                 <div class="alert-danger w-100 p-2 d-none">Cor é obrigatório</div>
             </div>
             <div class="form-group col-md-12">
                 <label>Descrição:</label>
-                <textarea class="form-control" id="descricao" rows="10" placeholder="Insira a descrição do veículo"  name="descricao"></textarea>
+                <textarea class="form-control" id="descricao" name="descricao" rows="10" placeholder="Insira a descrição do veículo"></textarea>
                 <div class="alert-danger w-100 p-2 d-none">Descrição é obrigatório</div>
             </div>
             <div class="form-group col-md-12 text-right">
                 <button type="submit" class="btn btn-primary">
-                    Cadastrar Veículo
+                    Salvar Veículo
                 </button>
                 <button type="reset" class="btn btn-secondary">
                     Limpar
                 </button>
             </div>
         </form>
-
-        <?php 
-            // Verificar se foi enviando dados via POST
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $marca = (isset($_POST["marca"]) && $_POST["marca"] != null) ? $_POST["marca"] : "";
-                $modelo = (isset($_POST["modelo"]) && $_POST["modelo"] != null) ? $_POST["modelo"] : "";
-                $ano = (isset($_POST["ano"]) && $_POST["ano"] != null) ? $_POST["ano"] : "";
-                $preco = (isset($_POST["preco"]) && $_POST["preco"] != null) ? $_POST["preco"] : NULL;
-                $foto = (isset($_POST["foto"]) && $_POST["foto"] != null) ? $_POST["foto"] : NULL;
-             
-                try {
-                    $conexao = new PDO("mysql:host=localhost; dbname=concessionaria", "root", "root");
-                    $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $conexao->exec("set names utf8");
-
-                    $stmt = $conexao->prepare("INSERT INTO carros (fk_id_marca, modelo, ano, preco, foto, cor, descricao) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                    
-                    $stmt->bindParam(1, $marca);
-                    $stmt->bindParam(2, $modelo);
-                    $stmt->bindParam(3, $ano);
-                    $stmt->bindParam(4, $preco);
-                    $stmt->bindParam(5, $foto);
-
-                    
-
-                } catch (PDOException $erro) {
-                    echo "Erro na conexão:" . $erro->getMessage();
-                }
-            }
-        ?>
-
         <hr>
         <footer class="mb-5">
             <p>&copy; Instituto Federal do Sul de Minas Gerais – IFSULDEMINAS | Campus Poços de Caldas, MG.</p>
