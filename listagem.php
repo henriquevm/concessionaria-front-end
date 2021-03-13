@@ -1,3 +1,19 @@
+<?php
+    require_once('conexao.php');
+
+    if (isset($_POST["id_excluir"])) {
+
+        try {  
+            $sql = "DELETE FROM veiculo WHERE id_veiculo = ?";
+
+            $stmt = $conexao->prepare($sql);
+            $stmt->execute([$_POST["id_excluir"]]);
+        } catch (PDOException $erro) {
+            echo "Erro na conexão:" . $erro->getMessage();
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +21,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Concessionária - Gerenciamento de Veículos</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        .btn-excluir {
+            height: 38px;
+            margin-left: 5px;
+        }
+    </style>
 </head>
 <body>
 
@@ -66,7 +89,7 @@
                                              echo "</p>";
                                              echo "<p class='text-right'>";
                                                 echo "<a href='editar.php?id=".$rs->id."' class='btn btn-primary'>"."Editar"."</a>";
-                                                echo "<a href='#' class='btn btn-danger'>"."Excluir"."</a>";
+                                                echo "<button type='button' data-toggle='modal' data-target='#modalConfirmacao' onclick=\"$('#id_excluir').val(".$rs->id.")\" class='btn btn-danger btn-excluir'>Excluir</a>";
                                             echo "</p>";
                                         echo "</div>";
                                     echo "</div>";
@@ -93,6 +116,32 @@
             <p>&copy; Instituto Federal do Sul de Minas Gerais – IFSULDEMINAS | Campus Poços de Caldas, MG.</p>
         </footer>
     </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="modalConfirmacao">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Deseja realmente excluir este veículo?</p>
+                </div>
+                <div class="modal-footer">
+                    <form method="POST" action="#">
+                        <input type="hidden" id="id_excluir" name="id_excluir">
+                        <button type="submit" class="btn btn-primary">Excluir</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     
+    <!-- jQuery e JS do Bootstrap, utilizados no modal de confirmação da exclusão de um veículo -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf" crossorigin="anonymous"></script>
 </body>
 </html>
