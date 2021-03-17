@@ -13,6 +13,7 @@
         $stmt = $conexao->prepare($sql);
         $stmt->execute([$_POST["id_marca"], $_POST["modelo"], $_POST["ano"], $_POST["preco"],
             $_POST["foto"], $_POST["id_cor"], $_POST["descricao"], $_GET["id"]]);
+        $showConfirmModal = true;
     }
 
     $marcas = [];
@@ -145,6 +146,35 @@
             <p>&copy; Instituto Federal do Sul de Minas Gerais – IFSULDEMINAS | Campus Poços de Caldas, MG.</p>
         </footer>
     </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="modalConfirmacao">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sucesso</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Veiculo editado com sucesso!</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="listagem.php"><button type="button" class="btn btn-primary">Fechar</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery e JS do Bootstrap, utilizados no modal de confirmação da cadastro de um veículo  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf" crossorigin="anonymous"></script>
+
+    <?php
+        if ($showConfirmModal === true) {
+            echo "<script>$(document).ready(() => { $('#modalConfirmacao').modal('show') });</script>";
+        }  
+    ?>
     
 </body>
 </html>
