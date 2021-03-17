@@ -7,7 +7,7 @@
         isset($_POST["descricao"]) && isset($_GET["id"])) {
 
         $sql = "UPDATE veiculo SET fk_id_marca = ?,
-            modelo = ?, ano = ?, preco = ?, foto = ?, fk_id_cor = ?, descricao = ?
+            modelo = ?, ano = ?, preco = ?, foto = ?, fk_id_cor = ?, descricao = ?, data_edicao = NOW()
             WHERE id_veiculo = ?";
             
         $stmt = $conexao->prepare($sql);
@@ -82,7 +82,7 @@
         <form id="formVeiculo" method="POST" action="#" class="row">
             <div class="form-group col-md-6">
                 <label>Marca:</label>
-                <select id="marca" name="id_marca" class="form-control custom-select">
+                <select id="marca" name="id_marca" class="form-control custom-select" required>
                     <option value="" disabled>-- Selecionar --</option>
                     <?php
                         for ($i = 0; $i < count($marcas); $i++) {
@@ -96,26 +96,26 @@
             </div>
             <div class="form-group col-md-6">
                 <label>Modelo:</label>
-                <input type="text" id="modelo" name="modelo" class="form-control" value="<?php echo $veiculo['modelo'] ?>" placeholder="Insira o nome do modelo">
+                <input type="text" id="modelo" name="modelo" class="form-control" value="<?php echo $veiculo['modelo'] ?>" placeholder="Insira o nome do modelo" required>
                 <div class="alert-danger w-100 p-2 d-none">Modelo inválido</div>
             </div>
             <div class="form-group col-md-6">
                 <label>Ano:</label>
-                <input type="number" id="ano" name="ano" class="form-control" value="<?php echo $veiculo['ano'] ?>" placeholder="Insira o ano do modelo">
+                <input type="number" id="ano" name="ano" class="form-control" value="<?php echo $veiculo['ano'] ?>" placeholder="Insira o ano do modelo" required>
                 <div class="alert-danger w-100 p-2 d-none">Ano inválido</div>
             </div>
             <div class="form-group col-md-6">
                 <label>Preço:</label>
-                <input type="text" id="preco" name="preco" class="form-control" value="<?php echo $veiculo['preco'] ?>" placeholder="Insira o preço do modelo">
+                <input type="text" id="preco" name="preco" class="form-control" value="<?php echo $veiculo['preco'] ?>" placeholder="Insira o preço do modelo" required>
                 <div class="alert-danger w-100 p-2 d-none">Preço inválido</div>
             </div>
             <div class="form-group col-md-6">
                 <label>Foto:</label>
-                <input type="text" id="foto" name="foto" class="form-control" value="<?php echo $veiculo['foto'] ?>" placeholder="Insira o nome da foto">
+                <input type="text" id="foto" name="foto" class="form-control" value="<?php echo $veiculo['foto'] ?>" placeholder="Insira o nome da foto" required>
             </div>
             <div class="form-group col-md-6">
                 <label>Cor:</label>
-                <select id="cor" name="id_cor" class="form-control custom-select">
+                <select id="cor" name="id_cor" class="form-control custom-select" required>
                     <option value="" disabled>-- Selecionar --</option>
                     <?php
                         for ($i = 0; $i < count($cores); $i++) {
@@ -129,7 +129,7 @@
             </div>
             <div class="form-group col-md-12">
                 <label>Descrição:</label>
-                <textarea class="form-control" id="descricao" name="descricao" rows="10" placeholder="Insira a descrição do veículo"><?php echo $veiculo['descricao'] ?></textarea>
+                <textarea class="form-control" id="descricao" name="descricao" rows="10" placeholder="Insira a descrição do veículo" required><?php echo $veiculo['descricao'] ?></textarea>
                 <div class="alert-danger w-100 p-2 d-none">Descrição é obrigatório</div>
             </div>
             <div class="form-group col-md-12 text-right">
